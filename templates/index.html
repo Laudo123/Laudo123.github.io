@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster Grid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .poster-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
+            gap: 10px;
+            margin: 40px; /* Add margin to the grid */
+            max-width: 1200px; /* Set a maximum width for the grid */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .poster {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .poster img {
+            width: 100%; /* Make images responsive */
+            height: auto;
+            display: block;
+        }
+
+        .selected {
+            border: 3px solid yellow; /* Highlight border for selected posters */
+            transform: scale(1.05); /* Slightly bigger size for selected posters */
+        }
+
+        .poster:hover {
+            transform: scale(1.1); /* Slightly bigger size for hovered posters */
+        }
+
+        #nextSection, #spotifyPlayer, #exampleImage, #ratingSection, #resetButton {
+            display: none; /* Initially hide the results section, Spotify player, and example image */
+        }
+
+        #spotifyPlayer, #exampleImage {
+            width: 30%; /* Set the width of the Spotify player and example image */
+            border-radius: 12px; /* Apply border radius */
+        }
+
+        #spotifyPlayer {
+            float: left; /* Float the player to the left */
+            margin: 0px 0px 0px 200px; /* Add margin to the player */
+        }
+
+        #exampleImage {
+            float: right; /* Float the image to the right */
+            margin: 0px 200px 0px 0px; /* Add margin to the image */
+        }
+
+        #selectionMessage {
+            margin: 0px 0px 10px 0px;
+            font-weight: bold;
+        }
+
+        #ratingSection {
+            margin: 10px;
+        }
+
+        .ratingText {
+            font-size: 26px; /* Adjust the font size as needed */
+        }
+
+        .ratingStars {
+            font-size: 48px;
+        }
+
+        .ratingStars:hover {
+            font-size: 48px;
+        }
+
+        .star {
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.2s, transform 0.2s;
+            display: inline-block; /* Fix for inline elements not responding well to transforms */
+        }
+
+        .star.active {
+            color: gold;
+        }
+
+        .star:hover {
+            color: gold;
+            transform: scale(1.2);
+        }
+
+    #resetButton {
+        display: none; /* Initially hide the reset button */
+        bottom: 10px;
+        scale: 2;
+        float: left; /* Float the image to the right */
+        margin: 40px 0px 0px 400px; /* Add margin to the image */;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        #resetButton:hover {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Movie Poster Grid</h1>
+    <div id="instructions">
+        <p>
+            1. Explore the Posters: Click on the movie posters below to make your selections. Choose the ones that catch your eye, based on color, art style, or any other visual preference.
+        </p>
+        <p>
+            2. Discover the Music: Once you've selected three posters, we'll recommend a song just for you. Enjoy the embedded music player with the song title and play/pause controls.
+        </p>
+        <p>
+            3. Dive into the Data: Scroll down to explore the data visualization that connects your poster choices with the recommended song. Learn how they relate to each other.
+        </p>
+        <p>
+            4. Keep the Music Playing: You can continue listening to the recommended song while you explore the visualization.
+        </p>
+        <p>
+            5. Share Your Thoughts: After your experience, we'd love to hear from you. Answer a quick question about your experience using this interface for music discovery.
+        </p>
+        <p>
+            6. Ready for More? If you'd like to start over, simply hit the "Reset" button and begin your music journey again. Let's get started! Click on the posters and enjoy the music.
+        </p>
+    </div>
+    <div class="poster-grid" id="posterGrid">
+        {% for url in random_urls %}
+            <div class="poster" onclick="selectPoster(this)">
+                <img src="{{ url }}" alt="Movie Poster">
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="selectionMessage">You need to select 3 more posters</div>
+
+    <div id="nextSection">
+    </div>
+
+    <div id="spotifyPlayer">
+        <iframe id="spotifyIframe" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+    <div id="ratingSection">
+        <p class="ratingText">Does using this interface make it more likely that you will listen to the given music as recommended?</p>
+        <div class="ratingStars">
+            <span class="star" onclick="setRating(1)">&#9733;</span>
+            <span class="star" onclick="setRating(2)">&#9733;</span>
+            <span class="star" onclick="setRating(3)">&#9733;</span>
+            <span class="star" onclick="setRating(4)">&#9733;</span>
+            <span class="star" onclick="setRating(5)">&#9733;</span>
+        </div>
+    </div>
+
+    <div id="exampleImage">
+        <img src="static/images/example.png" alt="Example Image">
+    </div>
+
+    <button id="resetButton" onclick="resetSelection()">Reset Selection</button>
+
+
+
+    <script>
+        // Counter to keep track of selected posters
+        var selectedCount = 0;
+
+        function selectPoster(poster) {
+            // Check if three posters are already selected
+            if (selectedCount === 3) {
+                return; // Do nothing if three posters are already selected
+            }
+
+            // Toggle the selection status of the poster
+            if (poster.classList.contains('selected')) {
+                poster.classList.remove('selected');
+                selectedCount -= 1;
+            } else {
+                poster.classList.add('selected');
+                selectedCount += 1;
+            }
+
+            // Update the selection message
+            var selectionMessage = document.getElementById('selectionMessage');
+            var remainingPosters = 3 - selectedCount;
+            selectionMessage.textContent = `You need to select ${remainingPosters} more poster${remainingPosters !== 1 ? 's' : ''}`;
+
+            // Check if three posters are selected after the current selection
+            if (selectedCount === 3) {
+                // Display the results section, Spotify player, and example image
+                document.getElementById('nextSection').style.display = 'block';
+                document.getElementById('spotifyPlayer').style.display = 'block';
+                document.getElementById('exampleImage').style.display = 'block';
+                document.getElementById('ratingSection').style.display = 'block';
+                document.getElementById('resetButton').style.display = 'block';
+                // Scroll to the next section
+                document.getElementById('nextSection').scrollIntoView({ behavior: 'smooth' });
+
+                // Get the Spotify player iframe
+                var spotifyIframe = document.getElementById('spotifyIframe');
+
+                // Change the src attribute to include autoplay
+                spotifyIframe.src = "https://open.spotify.com/embed/track/2ZpOQ2MJxce0xf1eKhobMR?utm_source=generator&theme=0&autoplay=1";
+            }
+        }
+
+        var currentRating = 0;
+
+        function setRating(rating) {
+            currentRating = rating;
+
+            // Remove active class from all stars
+            var stars = document.querySelectorAll('.star');
+            stars.forEach(function(star, index) {
+                star.classList.remove('active');
+
+                // Add active class to stars up to the clicked star
+                if (index < rating) {
+                    star.classList.add('active');
+                }
+            });
+        }
+        // Function to reset the selection
+
+        function resetSelection() {
+            // Refresh the page
+            location.reload();
+        }
+
+        // Show the reset button when the posters are selected
+        function showResetButton() {
+            var resetButton = document.getElementById('resetButton');
+            resetButton.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
