@@ -4,11 +4,14 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 data = pd.read_csv("static/data.csv")
+#data = pd.read_csv("/home/Laudo/Laudo123.github.io/static/data.csv") for pythonanywere
 data.drop(data.columns[0], axis=1, inplace=True)
 data = data.dropna()
 data['Year'] = data['Year'].astype('int32')
 
+
 @app.route('/')
+
 
 def index():
     # For simplicity, assume you have a list of image URLs
