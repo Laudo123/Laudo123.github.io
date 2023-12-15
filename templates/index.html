@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poster Grid</title>
+    <title>Pleasure Unknown</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,8 +42,9 @@
         }
 
         .selected {
-            border: 3px solid yellow; /* Highlight border for selected posters */
-            transform: scale(1.05); /* Slightly bigger size for selected posters */
+            border: 3px solid yellow;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.7); /* Add box shadow for highlight */
         }
 
         .poster:hover {
@@ -127,7 +128,7 @@
     </style>
 </head>
 <body>
-    <h1>Movie Poster Grid</h1>
+    <h1>Pleasures Unknwown</h1>
     <div id="instructions">
         <p>
             1. Explore the Posters: Click on the movie posters below to make your selections. Choose the ones that catch your eye, based on color, art style, or any other visual preference.
@@ -147,6 +148,9 @@
         <p>
             6. Ready for More? If you'd like to start over, simply hit the "Reset" button and begin your music journey again. Let's get started! Click on the posters and enjoy the music.
         </p>
+        <p>
+            7. Want to share your thoughts? <a href="https://forms.gle/GVjZqWzxjVLuPsZLA" target="_blank">Fill out our feedback form</a>.
+        </p>
     </div>
     <div class="poster-grid" id="posterGrid">
         {% for url in random_urls %}
@@ -162,16 +166,16 @@
     </div>
 
     <div id="spotifyPlayer">
-        <iframe id="spotifyIframe" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <iframe id="spotifyIframe" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="{{ song_url }}"></iframe>
     </div>
     <div id="ratingSection">
         <p class="ratingText">Does using this interface make it more likely that you will listen to the given music as recommended?</p>
         <div class="ratingStars">
-            <span class="star" onclick="setRating(1)">&#9733;</span>
-            <span class="star" onclick="setRating(2)">&#9733;</span>
-            <span class="star" onclick="setRating(3)">&#9733;</span>
-            <span class="star" onclick="setRating(4)">&#9733;</span>
-            <span class="star" onclick="setRating(5)">&#9733;</span>
+            <span class="star" onclick="setRating(1); openFeedbackForm()">&#9733;</span>
+            <span class="star" onclick="setRating(2); openFeedbackForm()">&#9733;</span>
+            <span class="star" onclick="setRating(3); openFeedbackForm()">&#9733;</span>
+            <span class="star" onclick="setRating(4); openFeedbackForm()">&#9733;</span>
+            <span class="star" onclick="setRating(5); openFeedbackForm()">&#9733;</span>
         </div>
     </div>
 
@@ -218,11 +222,13 @@
                 // Scroll to the next section
                 document.getElementById('nextSection').scrollIntoView({ behavior: 'smooth' });
 
-                // Get the Spotify player iframe
-                var spotifyIframe = document.getElementById('spotifyIframe');
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Get the Spotify player iframe
+                    const spotifyIframe = document.getElementById('spotifyIframe');
 
-                // Change the src attribute to include autoplay
-                spotifyIframe.src = "https://open.spotify.com/embed/track/2ZpOQ2MJxce0xf1eKhobMR?utm_source=generator&theme=0&autoplay=1";
+                    // Set the Spotify player source with the provided song URL
+                    spotifyIframe.src = "{{ song_url }}";
+                });
             }
         }
 
@@ -253,6 +259,11 @@
         function showResetButton() {
             var resetButton = document.getElementById('resetButton');
             resetButton.style.display = 'block';
+        }
+
+        function openFeedbackForm() {
+        var feedbackFormLink = "https://forms.gle/GVjZqWzxjVLuPsZLA";
+        window.open(feedbackFormLink, '_blank');
         }
     </script>
 
