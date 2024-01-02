@@ -9,12 +9,17 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f4f4f4;
+            color: #333333;
             margin: 0;
             padding: 0;
         }
 
         h1 {
-            color: #333;
+            color: #333333;
+        }
+
+        .pink-text {
+            color: #ff9dbb; /* Soft pinkish color */
         }
 
         .poster-grid {
@@ -61,8 +66,9 @@
         }
 
         #spotifyPlayer {
-            float: left; /* Float the player to the left */
-            margin: 0px 0px 0px 200px; /* Add margin to the player */
+            border-radius: 12px;
+            margin: 0 auto; /* Center the player horizontally */
+            float: none; /* Remove float */
         }
 
         #exampleImage {
@@ -71,12 +77,12 @@
         }
 
         #selectionMessage {
-            margin: 0px 0px 10px 0px;
+            margin: 20px 0px -20px 0px;
             font-weight: bold;
         }
 
         #ratingSection {
-            margin: 10px;
+            margin: 0px 0px 0px 10px;
         }
 
         .ratingText {
@@ -107,19 +113,19 @@
             transform: scale(1.2);
         }
 
-    #resetButton {
-        display: none; /* Initially hide the reset button */
-        bottom: 10px;
-        scale: 2;
-        float: left; /* Float the image to the right */
-        margin: 40px 0px 0px 400px; /* Add margin to the image */;
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+        #resetButton {
+            display: none; /* Initially hide the reset button */
+            bottom: 10px;
+            scale: 2;
+            float: left; /* Float the image to the right */
+            margin: 40px 0px 0px 400px; /* Add margin to the image */;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
         #resetButton:hover {
             background-color: #555;
@@ -128,30 +134,16 @@
     </style>
 </head>
 <body>
-    <h1>Pleasures Unknwown</h1>
+    <h1>Pleasures Unknown</h1>
     <div id="instructions">
-        <p>
-            1. Explore the Posters: Click on the movie posters below to make your selections. Choose the ones that catch your eye, based on color, art style, or any other visual preference.
-        </p>
-        <p>
-            2. Discover the Music: Once you've selected three posters, we'll recommend a song just for you. Enjoy the embedded music player with the song title and play/pause controls.
-        </p>
-        <p>
-            3. Dive into the Data: Scroll down to explore the data visualization that connects your poster choices with the recommended song. Learn how they relate to each other.
-        </p>
-        <p>
-            4. Keep the Music Playing: You can continue listening to the recommended song while you explore the visualization.
-        </p>
-        <p>
-            5. Share Your Thoughts: After your experience, we'd love to hear from you. Answer a quick question about your experience using this interface for music discovery.
-        </p>
-        <p>
-            6. Ready for More? If you'd like to start over, simply hit the "Reset" button and begin your music journey again. Let's get started! Click on the posters and enjoy the music.
-        </p>
-        <p>
-            7. Want to share your thoughts? <a href="https://forms.gle/GVjZqWzxjVLuPsZLA" target="_blank">Fill out our feedback form</a>.
-        </p>
+        <p>1. <span class="pink-text">Click on movie posters</span> based on visual preference.</p>
+        <p>2. <span class="pink-text">Select three posters</span> for a personalized song recommendation.</p>
+        <p>3. <span class="pink-text">Explore the data visualization</span> connecting posters and songs.</p>
+        <p>4. <span class="pink-text">Listen to the recommended song</span> while exploring.</p>
+        <p>5. <span class="pink-text">Share your feedback</span> after the experience.</p>
+        <p>6. <span class="pink-text">Hit <span style="color: red;">"Reset"</span> to start over.</span> Enjoy the music journey!</p>
     </div>
+    <div id="selectionMessage">You need to select 3 more posters</div>
     <div class="poster-grid" id="posterGrid">
         {% for url in random_urls %}
             <div class="poster" onclick="selectPoster(this)">
@@ -160,7 +152,6 @@
         {% endfor %}
     </div>
 
-    <div id="selectionMessage">You need to select 3 more posters</div>
 
     <div id="nextSection">
     </div>
@@ -180,7 +171,7 @@
     </div>
 
     <div id="exampleImage">
-        <img src="static/images/example.png" alt="Example Image">
+        <img src="{{ random_spider_chart }}" alt="Example Image">
     </div>
 
     <button id="resetButton" onclick="resetSelection()">Reset Selection</button>
