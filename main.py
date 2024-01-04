@@ -16,7 +16,7 @@ songs = pd.read_csv("static/genres_v2.csv")
 songs.drop(songs.columns[0], axis=1, inplace=True)
 
 spider_chart_images = [
-    f"static/images/spider_chart{i}.png" for i in range(5) # f"/home/Laudo/Laudo123.github.io/static/images/spider_chart{i}.png" for i in range(4)
+    f"static/images/spider_chart{i}.png" for i in range(10) # f"/home/Laudo/Laudo123.github.io/static/images/spider_chart{i}.png" for i in range(10)
 ]
 
 @app.route('/')
@@ -25,11 +25,13 @@ spider_chart_images = [
 def index():
     # For simplicity, assume you have a list of image URLs
     random_urls = data['Image'].sample(15).tolist()
+    # random_indices = data.sample(15).index.tolist()
+    # random_urls = data.loc[random_indices, 'Image'].tolist()
+    # random_descriptions = data.loc[random_indices, 'Description'].tolist()
     random_song_id = songs['id'].sample(1).tolist()
     song_url = "https://open.spotify.com/embed/track/{}?utm_source=generator&theme=0&autoplay=1".format(random_song_id[0])
     random_spider_chart = random.choice(spider_chart_images)
     return render_template('index.html', random_urls=random_urls, song_url=song_url, random_spider_chart=random_spider_chart)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
