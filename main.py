@@ -23,7 +23,6 @@ spider_chart_images = [
 
 
 def index():
-    # For simplicity, assume you have a list of image URLs
     random_urls = data['Image'].sample(15).tolist()
     # random_indices = data.sample(15).index.tolist()
     # random_urls = data.loc[random_indices, 'Image'].tolist()

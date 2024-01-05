@@ -119,13 +119,14 @@
             display: none; /* Initially hide the reset button */
             height: 500%;
             width: 20%;
-            margin: 0 auto; /* Add margin to the image */;
+            margin: 0 auto 20px; /* Add margin to the image */;
             background-color: #333;
             color: #fff;
             padding: 20px 30px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+
         }
 
         #resetButton:hover {
@@ -143,6 +144,7 @@
         <p>4. <span class="pink-text">Listen to the recommended song</span> while exploring.</p>
         <p>5. <span class="pink-text">Share your feedback</span> after the experience.</p>
         <p>6. <span class="pink-text">Hit <span style="color: red;">"Reset"</span> to start over.</span> Enjoy the music journey!</p>
+        <p>7. <span class="pink-text">Want to share your thoughts?</span> <a href="https://forms.gle/8rdDYJFHszWJLbqm8" target="_blank">Fill out our feedback form</a>.</p>
     </div>
     <div id="selectionMessage">You need to select 3 more posters</div>
     <div class="poster-grid" id="posterGrid">
@@ -161,7 +163,7 @@
         <iframe id="spotifyIframe" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="{{ song_url }}"></iframe>
     </div>
     <div id="ratingSection">
-        <p class="ratingText">Does using this interface make it more likely that you will listen to the given music as recommended?</p>
+        <p class="ratingText">Does this interface help you understand the music recommendation?</p>
         <div class="ratingStars">
             <span class="star" onclick="setRating(1); openFeedbackForm()">&#9733;</span>
             <span class="star" onclick="setRating(2); openFeedbackForm()">&#9733;</span>
@@ -253,7 +255,7 @@
         }
 
         function openFeedbackForm() {
-        var feedbackFormLink = "https://forms.gle/GVjZqWzxjVLuPsZLA";
+        var feedbackFormLink = "https://forms.gle/8rdDYJFHszWJLbqm8";
         window.open(feedbackFormLink, '_blank');
         }
 
